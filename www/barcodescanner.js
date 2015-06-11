@@ -9,6 +9,7 @@
     var ScannerLoader = function (require, exports, module) {
 
         var exec = require("cordova/exec");
+        var doubleTapPrevention = false;
 
         /**
          * Constructor.
@@ -71,6 +72,14 @@
          * @param {Function} errorCallback
          */
         BarcodeScanner.prototype.scan = function (successCallback, errorCallback, config) {
+            if (doubleTapPrevention) {
+                console.log("BarcodeScanner.scan: double tap prevented!");
+                return;
+            }
+            doubleTapPrevention = true;
+            setTimeout(function() {
+                doubleTapPrevention = false;
+            }, 1000);
 
             if(config instanceof Array) {
                 // do nothing
